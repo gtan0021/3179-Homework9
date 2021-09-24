@@ -1,0 +1,40 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Police Fatalities in United States",
+    "width": 800,
+    "height": 600,
+    "data": {
+      "url": "US_States_SOVI_Infographics.json",
+      "format": {"type": "topojson", "feature": "US_States_SOVI_Infographics"}
+    },
+    "transform": [
+      {
+        "lookup": "properties.STATE_NAME",
+        "from": {
+          "data": {
+            "url": "states_fatalities.csv"
+          },
+          "key": "States",
+          "fields": ["Number_of_Fatalities"]
+        }
+      },
+      {"calculate": "datum.Number_of_Fatalities/datum.properties.POPULATION", "as": "Number of Police Fatalities per 10,000 population"}
+    ],
+
+    
+    "projection": {"type": "equirectangular"},
+    "mark": {"type": "geoshape"},
+    "encoding": {
+      "color": {
+        "field": "Number of Police Fatalities per 10,000 population",
+        "type": "quantitative",
+        "scale": {"type": "log"}
+
+     
+      },
+      "tooltip": [
+        {"field": "properties.STATE_NAME", "type": "nominal", "title": "States"},
+        {"field": "Number of Police Fatalities per 10,000 population", "type": "quantitative"}
+      ]
+    }
+  }
